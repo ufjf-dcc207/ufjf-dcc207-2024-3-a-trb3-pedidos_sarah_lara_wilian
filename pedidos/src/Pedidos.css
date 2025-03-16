@@ -1,0 +1,55 @@
+
+body {
+    margin: 5em;
+}
+
+.lista{
+    display: block;
+    gap: 2em;  
+}
+
+input {
+    margin-bottom: 5em; 
+    margin-left: 1em;  
+    margin-right: 4em;  
+}
+button {
+    padding: 0.7em;
+    font-size: 1em;
+    background-color: purple;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: 1em;   
+    margin-right: 1em;  
+}
+
+button:hover {
+    background-color: #5a2a8f;
+}
+
+
+.pedidos,
+.pedidosAtendidos{
+    display:flex;
+    flex-wrap: wrap;  
+    border: 1 solid purple;
+    padding: 1.5em;
+    gap: 1em;
+
+}
+
+.pedido-item,
+.pedidoAtendido-item {
+    background-color: #220222;
+    color: #fff; 
+    border-radius: 8px; 
+    padding: 0.5em; 
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); 
+    text-align: center; 
+    border: 1px solid purple; 
+    width: 200px;  
+    
+}
