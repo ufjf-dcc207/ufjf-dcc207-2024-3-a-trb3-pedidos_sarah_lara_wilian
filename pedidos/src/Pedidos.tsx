@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import './Pedidos.css';
 
 type Pedidos ={
@@ -12,6 +12,7 @@ export default function Pedidos(){
     const [pedidosAtendidos,setPedidosAtendidos] = useState<Pedidos[]>([]);
     const [produto,setProduto] = useState("");
     const [contador, setContador] = useState(1);
+    const [loading, setLoading] = useState(false); // Para controlar o estado de carregamento
 
     const adicionarPedido = ()=>{
         if(produto!=""){
@@ -35,6 +36,25 @@ export default function Pedidos(){
             setPedidos(pedidosFila);
         }
     };
+
+    // Usando useEffect para chamar a API e buscar pedidos
+    useEffect(() => {
+    const fetchPedidos = async () => {
+      setLoading(true); // Define que está carregando
+      const response = await fetch(''); //fazer uma solicitação HTTP para a URL da sua API
+
+      if (response.ok) {// se a \ solicitaçao foi bem sucedida
+        const data = await response.json();// obter os dados em formato JSON
+        setPedidos(data);// armazena esses dados no estado
+        //Isso vai atualizar o estado do componente com os pedidos recebidos da API, e a interface será renderizada novamente com esses dados.
+      }
+
+      setLoading(false); // Finaliza o carregamento
+    };
+
+    fetchPedidos(); // para iniciar o processo de obter os pedidos logo após a montagem do componente.
+  }, []); // O useEffect será executado apenas uma vez, após a montagem do componente
+
     
 
     return(
@@ -49,6 +69,9 @@ export default function Pedidos(){
             <button onClick={adicionarPedido}>Adicionar produto</button>
             <button onClick={atenderPedido}>Atender pedido</button>
         </div>
+       
+        {loading && <p>Carregando pedidos...</p>} 
+        
         <div className="fila">
             
             
