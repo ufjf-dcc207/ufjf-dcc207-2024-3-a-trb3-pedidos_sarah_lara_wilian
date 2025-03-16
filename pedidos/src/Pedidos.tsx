@@ -1,21 +1,21 @@
 import { useState } from "react";
-import './Pedido.css';
+import './Pedidos.css';
 
-type Pedido ={
+type Pedidos ={
     id: number;
     produto: string;
     atendido: boolean;
 };
 
-export default function Pedido(){
-    const [pedidos,setPedidos] = useState<Pedido[]>([]);
-    const [pedidosAtendidos,setPedidosAtendidos] = useState<Pedido[]>([]);
+export default function Pedidos(){
+    const [pedidos,setPedidos] = useState<Pedidos[]>([]);
+    const [pedidosAtendidos,setPedidosAtendidos] = useState<Pedidos[]>([]);
     const [produto,setProduto] = useState("");
     const [contador, setContador] = useState(1);
 
     const adicionarPedido = ()=>{
         if(produto!=""){
-            const novoPedido: Pedido = {
+            const novoPedido: Pedidos = {
                 id: contador,
                 produto:produto,
                 atendido: false
@@ -54,11 +54,11 @@ export default function Pedido(){
             
             <div className="pedidos">
               <h2>Pedidos em aberto</h2>
-                {pedidos.map((pedido)=> (
-                    <div key={pedido.id} className="pedido-item">
-                        <h2>Pedido {pedido.id}</h2>
-                        <p>produto: {pedido.produto}</p>
-                        <p>Status: {pedido.atendido ? "Atendido" : "Não Atendido"}</p>
+                {pedidos.map((pedidos)=> (
+                    <div key={pedidos.id} className="pedido-item">
+                        <h2>Pedido {pedidos.id}</h2>
+                        <p>produto: {pedidos.produto}</p>
+                        <p>Status: {pedidos.atendido ? "Atendido" : "Não Atendido"}</p>
                     </div>
                 ))}
             </div>
