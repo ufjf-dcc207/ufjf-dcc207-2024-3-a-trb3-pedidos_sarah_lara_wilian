@@ -9,7 +9,7 @@ type Pedidos ={
 };
 
 export default function Pedidos(){
-    const URL = 'https://script.google.com/macros/s/AKfycbwSCMoe-nJr280TbAC7hO3GOnaWILolh31hQAPRXv36Wl0FvsTkch43YZOTd5rJ9kVb/exec';
+    const URL = 'https://script.google.com/macros/s/AKfycbz8_qgJHSRDMwe2fvMApZNx9XQVaukzkq-MbjdOuG8Zb6To0bko_1vtDzNVG_9pkWys/exec';
     const zapier = 'https://hooks.zapier.com/hooks/catch/22089640/2lfjq9n/';
     const proxyURL = 'http://localhost:3001/zapier';
 
@@ -24,11 +24,9 @@ export default function Pedidos(){
             const [pedidoAtendido, ...pedidosFila] = pedidos;
             const pedidoAtendidoCopia = { ...pedidoAtendido, atendido: true }; 
             try{
-                await axios.post(zapier,[
-                    pedidoAtendidoCopia.id,
-                    pedidoAtendidoCopia.produto,
-                    pedidoAtendidoCopia.atendido.toString()
-                ])
+                await axios.post(proxyURL,pedidoAtendidoCopia
+                );
+                console.log(pedidoAtendidoCopia);
                 setPedidosAtendidos([...pedidosAtendidos, pedidoAtendidoCopia]); 
                 setPedidos(pedidosFila);
             }catch (e){
@@ -51,8 +49,8 @@ export default function Pedidos(){
                 atendido: atendido,
             }; 
         });
-        setPedidos(fetchedPedidos.filter(p => !p.atendido));
-        setPedidosAtendidos(fetchedPedidos.filter(p => p.atendido));
+        setPedidos(fetchedPedidos.filter((p: { atendido: any; }) => !p.atendido));
+        setPedidosAtendidos(fetchedPedidos.filter((p: { atendido: any; }) => p.atendido));
         // armazena esses dados no estado
         //Isso vai atualizar o estado do componente com os pedidos recebidos da API, e a interface será renderizada novamente com esses dados.
       }catch(e){

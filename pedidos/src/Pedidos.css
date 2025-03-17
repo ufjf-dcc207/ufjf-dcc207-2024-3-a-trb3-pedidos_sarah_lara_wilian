@@ -43,7 +43,7 @@ button:hover {
 
 .pedido-item,
 .pedidoAtendido-item {
-    background-color: #220222;
+    background-color: purple;
     color: #fff; 
     border-radius: 8px; 
     padding: 0.5em; 
