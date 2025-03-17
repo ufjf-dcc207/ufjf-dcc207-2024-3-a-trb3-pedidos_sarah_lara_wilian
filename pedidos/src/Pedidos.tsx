@@ -10,22 +10,8 @@ type Pedidos ={
 export default function Pedidos(){
     const [pedidos,setPedidos] = useState<Pedidos[]>([]);
     const [pedidosAtendidos,setPedidosAtendidos] = useState<Pedidos[]>([]);
-    const [produto,setProduto] = useState("");
-    const [contador, setContador] = useState(1);
     const [loading, setLoading] = useState(false); // Para controlar o estado de carregamento
 
-    const adicionarPedido = ()=>{
-        if(produto!=""){
-            const novoPedido: Pedidos = {
-                id: contador,
-                produto:produto,
-                atendido: false
-            };
-            setPedidos([...pedidos,novoPedido]);
-            setProduto("");
-            setContador(contador+1);
-        }
-    };
 
 
     const atenderPedido = () => {
@@ -61,12 +47,6 @@ export default function Pedidos(){
         <>
         <div className="cabecalho">
             <h1>Delivery de Pedidos</h1>
-            <input type="text"
-            placeholder="Informe o produto"
-            value={produto}
-            onChange={(e)=>setProduto(e.target.value)} />
-
-            <button onClick={adicionarPedido}>Adicionar produto</button>
             <button onClick={atenderPedido}>Atender pedido</button>
         </div>
        
