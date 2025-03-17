@@ -15,7 +15,7 @@ export default function Pedidos(){
 
     const [pedidos,setPedidos] = useState<Pedidos[]>([]);
     const [pedidosAtendidos,setPedidosAtendidos] = useState<Pedidos[]>([]);
-    const [loading, setLoading] = useState(false); // Para controlar o estado de carregamento
+    const [loading, setLoading] = useState(false); 
     const pedidoRecebidorRef = useRef<EventSource | null>(null);
 
 
@@ -37,9 +37,9 @@ export default function Pedidos(){
 
 
     const fetchPedidos = async () => {
-      setLoading(true); // Define que está carregando
+      setLoading(true); 
       try{
-        const response = await axios.get(URL); //fazer uma solicitação HTTP para a URL da sua API
+        const response = await axios.get(URL); 
         console.log('Dados retornados pela API:',response.data);
         const fetchedPedidos = response.data.map((pedido:any)=>{
             const atendido = pedido.atendido;
@@ -51,24 +51,21 @@ export default function Pedidos(){
         });
         setPedidos(fetchedPedidos.filter((p: { atendido: any; }) => !p.atendido));
         setPedidosAtendidos(fetchedPedidos.filter((p: { atendido: any; }) => p.atendido));
-        // armazena esses dados no estado
-        //Isso vai atualizar o estado do componente com os pedidos recebidos da API, e a interface será renderizada novamente com esses dados.
       }catch(e){
         console.error('Erro ao buscar pedidos:',e);
       }
 
-      setLoading(false); // Finaliza o carregamento
+      setLoading(false); 
     };
     
-    // Usando useEffect para chamar a API e buscar pedidos
     useEffect(() => {
-        fetchPedidos(); // para iniciar o processo de obter os pedidos logo após a montagem do componente.
+        fetchPedidos();  
         pedidoRecebidorRef.current = new EventSource(zapier);
         pedidoRecebidorRef.current.onmessage=()=>{
             fetchPedidos();
         };
         return ()=> pedidoRecebidorRef.current?.close();
-    }, []); // O useEffect será executado apenas uma vez, após a montagem do componente
+    }, []); 
 
     
 
