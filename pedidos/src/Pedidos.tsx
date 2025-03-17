@@ -19,21 +19,30 @@ export default function Pedidos(){
     const pedidoRecebidorRef = useRef<EventSource | null>(null);
 
 
-    const atenderPedido = () => {
+    const atenderPedido = async () => {
         if (pedidos.length > 0) {
             const [pedidoAtendido, ...pedidosFila] = pedidos;
             const pedidoAtendidoCopia = { ...pedidoAtendido, atendido: true }; 
-            setPedidosAtendidos([...pedidosAtendidos, pedidoAtendidoCopia]); 
-            setPedidos(pedidosFila);
+            try{
+                await axios.post(zapier,[
+                    pedidoAtendidoCopia.id,
+                    pedidoAtendidoCopia.produto,
+                    pedidoAtendidoCopia.atendido.toString()
+                ])
+                setPedidosAtendidos([...pedidosAtendidos, pedidoAtendidoCopia]); 
+                setPedidos(pedidosFila);
+            }catch (e){
+                console.error('Erro ao enviar atualização para o Zapier:',e)
+            }
         }
     };
 
 
     const fetchPedidos = async () => {
       setLoading(true); // Define que está carregando
-      const response = await axios.get(URL); //fazer uma solicitação HTTP para a URL da sua API
-        
-      if (response.ok) {// se a \ solicitaçao foi bem sucedida
+      try{
+        const response = await axios.get(URL); //fazer uma solicitação HTTP para a URL da sua API
+        console.log('Dados retornados pela API:',response.data);
         const fetchedPedidos = response.data.map((pedido:any)=>{
             const atendido = pedido.atendido;
             return {
@@ -46,6 +55,8 @@ export default function Pedidos(){
         setPedidosAtendidos(fetchedPedidos.filter(p => p.atendido));
         // armazena esses dados no estado
         //Isso vai atualizar o estado do componente com os pedidos recebidos da API, e a interface será renderizada novamente com esses dados.
+      }catch(e){
+        console.error('Erro ao buscar pedidos:',e);
       }
 
       setLoading(false); // Finaliza o carregamento
