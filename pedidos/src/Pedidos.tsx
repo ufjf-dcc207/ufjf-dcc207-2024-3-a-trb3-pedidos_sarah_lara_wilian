@@ -32,10 +32,19 @@ export default function Pedidos(){
     const fetchPedidos = async () => {
       setLoading(true); // Define que está carregando
       const response = await axios.get(URL); //fazer uma solicitação HTTP para a URL da sua API
-
+        
       if (response.ok) {// se a \ solicitaçao foi bem sucedida
-        const data = await response.json();// obter os dados em formato JSON
-        setPedidos(data);// armazena esses dados no estado
+        const fetchedPedidos = response.data.map((pedido:any)=>{
+            const atendido = pedido.atendido;
+            return {
+                id: Number(pedido.id),
+                produto: pedido.produto.replace(/\n/g, " "),
+                atendido: atendido,
+            }; 
+        });
+        setPedidos(fetchedPedidos.filter(p => !p.atendido));
+        setPedidosAtendidos(fetchedPedidos.filter(p => p.atendido));
+        // armazena esses dados no estado
         //Isso vai atualizar o estado do componente com os pedidos recebidos da API, e a interface será renderizada novamente com esses dados.
       }
 
