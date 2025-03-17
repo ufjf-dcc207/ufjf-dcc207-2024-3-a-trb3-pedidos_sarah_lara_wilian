@@ -1,4 +1,5 @@
-import { useState, useEffect} from "react";
+import { useState, useEffect, useRef} from "react";
+import axios from 'axios';
 import './Pedidos.css';
 
 type Pedidos ={
@@ -8,10 +9,14 @@ type Pedidos ={
 };
 
 export default function Pedidos(){
+    const URL = 'https://script.google.com/macros/s/AKfycbwSCMoe-nJr280TbAC7hO3GOnaWILolh31hQAPRXv36Wl0FvsTkch43YZOTd5rJ9kVb/exec';
+    const zapier = 'https://hooks.zapier.com/hooks/catch/22089640/2lfjq9n/';
+    const proxyURL = 'http://localhost:3001/zapier';
+
     const [pedidos,setPedidos] = useState<Pedidos[]>([]);
     const [pedidosAtendidos,setPedidosAtendidos] = useState<Pedidos[]>([]);
     const [loading, setLoading] = useState(false); // Para controlar o estado de carregamento
-
+    const pedidoRecebidorRef = useRef<EventSource | null>(null);
 
 
     const atenderPedido = () => {
@@ -23,11 +28,10 @@ export default function Pedidos(){
         }
     };
 
-    // Usando useEffect para chamar a API e buscar pedidos
-    useEffect(() => {
+
     const fetchPedidos = async () => {
       setLoading(true); // Define que está carregando
-      const response = await fetch(''); //fazer uma solicitação HTTP para a URL da sua API
+      const response = await axios.get(URL); //fazer uma solicitação HTTP para a URL da sua API
 
       if (response.ok) {// se a \ solicitaçao foi bem sucedida
         const data = await response.json();// obter os dados em formato JSON
@@ -37,9 +41,16 @@ export default function Pedidos(){
 
       setLoading(false); // Finaliza o carregamento
     };
-
-    fetchPedidos(); // para iniciar o processo de obter os pedidos logo após a montagem do componente.
-  }, []); // O useEffect será executado apenas uma vez, após a montagem do componente
+    
+    // Usando useEffect para chamar a API e buscar pedidos
+    useEffect(() => {
+        fetchPedidos(); // para iniciar o processo de obter os pedidos logo após a montagem do componente.
+        pedidoRecebidorRef.current = new EventSource(zapier);
+        pedidoRecebidorRef.current.onmessage=()=>{
+            fetchPedidos();
+        };
+        return ()=> pedidoRecebidorRef.current?.close();
+    }, []); // O useEffect será executado apenas uma vez, após a montagem do componente
 
     
 
